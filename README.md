@@ -1,2 +1,5 @@
 # ArchIDE
-A tiny utility for creating, editing and uploading your AUR packages.
+A tiny utility to manage your AUR packages.
+
+#Developement
+ArchIDE is currently in Pre-alpha.
