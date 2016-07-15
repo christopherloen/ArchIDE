@@ -58,7 +58,7 @@ a {
   text-align: center;
   background-color: #159957;
   background-image: url("https://www.bhmpics.com/download/java_logo-1366x768.jpg");
-  background-size: 100% ;}
+  background-size: cover ;}
 
 @media screen and (min-width: 64em) {
   .page-header {
