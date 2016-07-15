@@ -57,8 +57,8 @@ a {
   color: #fff;
   text-align: center;
   background-color: #159957;
-  background-image: url("https://www.bhmpics.com/download/java_logo-1366x768.jpg");
-  background-size: 70% ;}
+  background-image: url("http://www.techspot.com/images2/news/bigimage/2016/05/2016-05-31-image.jpg");
+  background-size: cover ;}
 
 @media screen and (min-width: 64em) {
   .page-header {
