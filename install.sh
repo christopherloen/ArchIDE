@@ -1,8 +1,8 @@
 #!/bin/bash
-mkdir ~/.archide
+install -d ~/.archide
 cp ArchIDE.jar ~/.archide/
 cp archide.conf ~/.archide/
-cp upload.png ~/.archide/
+cp archide.log ~/.archide/
 echo "#!/bin/bash" >> archide
 echo "cd ~/.archide/ && java -jar ArchIDE.jar" >> archide
 chmod +x archide
