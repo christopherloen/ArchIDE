@@ -1,0 +1,4 @@
+Main-Class: Main
+Specification-Title: ArchIDE
+Specification-Version: 0.2.1 (pre-alpha)
+Specification-Vendor: Christopher Loen
