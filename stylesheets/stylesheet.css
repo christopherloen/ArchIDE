@@ -58,7 +58,7 @@ a {
   text-align: center;
   background-color: #159957;
   background-image: url("https://github.com/christopherloen/ArchIDE/blob/gh-pages/stylesheets/bg.png");
-  background-size: 100% ;}
+  background-size: cover ;}
 
 @media screen and (min-width: 64em) {
   .page-header {
