@@ -15,6 +15,7 @@ public class Main extends JFrame implements ActionListener{
   JScrollPane scrollPane = new JScrollPane(logArea);
   Font plain = new Font("Monospace", Font.PLAIN, 11);
   JMenuBar mainMenuBar = new JMenuBar();
+
     JMenu fileMenu = new JMenu("File");
       JMenuItem newPkg = new JMenuItem("New Package");
       JMenuItem openPkg = new JMenuItem("Clone existing package");
@@ -62,28 +63,36 @@ public class Main extends JFrame implements ActionListener{
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     scrollPane.setPreferredSize(new Dimension(100, 100));
 
-    fileMenu.add(newPkg); newPkg.addActionListener(this);
-    fileMenu.add(openPkg); openPkg.addActionListener(this);
-    fileMenu.add(refresh); refresh.addActionListener(this);
-    pkgMenu.add(build);
-    pkgMenu.add(install);
-    pkgMenu.add(ncPKGBUILD);
-    pkgMenu.add(ncbin);
-    pkgMenu.add(upload);
+    fileMenu.add(newPkg);
+      newPkg.addActionListener(this);
+    fileMenu.add(openPkg);
+      openPkg.addActionListener(this);
+    fileMenu.add(refresh);
+      refresh.addActionListener(this);
 
-    editMenu.add(openPKGBUILD);
-    editMenu.add(openInstallFile);
-    editMenu.add(newInstallFile);
-    editMenu.add(settings); settings.addActionListener(this);
-    editMenu.add(clearLogs); clearLogs.addActionListener(this);
+    pkgMenu.add(build);
+      pkgMenu.add(install);
+        pkgMenu.add(ncPKGBUILD);
+          pkgMenu.add(ncbin);
+            pkgMenu.add(upload);
+
+            editMenu.add(openPKGBUILD);
+              editMenu.add(openInstallFile);
+                editMenu.add(newInstallFile);
+                  editMenu.add(settings);
+                    settings.addActionListener(this);
+                    editMenu.add(clearLogs);
+                      clearLogs.addActionListener(this);
 
     mainMenuBar.add(fileMenu);
-    mainMenuBar.add(editMenu);
-    mainMenuBar.add(pkgMenu);
+      mainMenuBar.add(editMenu);
+        mainMenuBar.add(pkgMenu);
 
-    setLocationRelativeTo(null);
+
     functions.loadPackages(build, install, ncPKGBUILD, ncbin, upload, openPKGBUILD, newInstallFile, openInstallFile, logArea);
-    setVisible(true);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
 
   }
 
@@ -95,28 +104,32 @@ public class Main extends JFrame implements ActionListener{
     String thistime = dateFormat.format(date);
 
     //Create new package directory
-    if (e.getSource() == newPkg){
-      dispose();
-      newPKG gui = new newPKG();
-      gui.newPKGGUI();
-      logArea.append("\n" + thistime + ": [initialized creation of new package]");
-      String log = "[initialized creation of new package]";
-      functions.logWriter(log);
-    }
+      if (e.getSource() == newPkg)
+      {
+        dispose();
+        newPKG gui = new newPKG();
+        gui.newPKGGUI();
+        logArea.append("\n" + thistime + ": [initialized creation of new package]");
+        String log = "[initialized creation of new package]";
+        functions.logWriter(log);
+      }
 
-    if (e.getSource() == settings){
+    if (e.getSource() == settings)
+    {
       try
       {
-        String editor = Files.readAllLines(Paths.get("archide.conf")).get(7);
-        functions.openConf(editor);
-        String log = "\n" + thistime + ": [changing configurations archide.conf]";
-        logArea.append(log);
-        functions.logWriter(log);
+          String editor = Files.readAllLines(Paths.get("archide.conf")).get(7);
+          functions.openConf(editor);
+          String log = "\n" + thistime + ": [changing configurations archide.conf]";
+          logArea.append(log);
+          functions.logWriter(log);
+
       } catch (IOException ioe) { System.out.println(ioe); }
 
     }
 
-    if (e.getSource() == openPkg){
+    if (e.getSource() == openPkg)
+    {
       dispose();
       clonePKG gui = new clonePKG();
       gui.clonePKGGUI();
@@ -125,20 +138,23 @@ public class Main extends JFrame implements ActionListener{
       functions.logWriter(log);
     }
 
-    if (e.getSource() == clearLogs){
+    if (e.getSource() == clearLogs)
+    {
       functions.clearLogs();
       this.dispose();
       new Main();
     }
 
-    if (e.getSource() == refresh){
+    if (e.getSource() == refresh)
+    {
       logArea.append(thistime + ": ~reloading ArchIDE~");
       functions.logWriter("~reloading ArchIDE~");
       dispose(); new Main();
     }
 }
 
-  public static void main(String[] args){
+  public static void main(String[] args)
+  {
      new Main();
    }
 }
