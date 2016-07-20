@@ -1,3 +1,4 @@
+package com.loen.archide;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -6,6 +7,10 @@ import java.awt.event.*;
 import java.util.*;
 import java.text.*;
 import java.nio.file.*;
+import com.loen.archide.Functions;
+import com.loen.archide.newPKG;
+import com.loen.archide.clonePKG;
+import com.loen.archide.uploadPKG;
 
 public class Main extends JFrame implements ActionListener{
 
@@ -15,11 +20,12 @@ public class Main extends JFrame implements ActionListener{
   JScrollPane scrollPane = new JScrollPane(logArea);
   Font plain = new Font("Monospace", Font.PLAIN, 11);
   JMenuBar mainMenuBar = new JMenuBar();
-
     JMenu fileMenu = new JMenu("File");
       JMenuItem newPkg = new JMenuItem("New Package");
       JMenuItem openPkg = new JMenuItem("Clone existing package");
       JMenuItem refresh = new JMenuItem("Reload ArchIDE");
+      JMenu remove_folder = new JMenu("Remove folders");
+      JMenuItem quit = new JMenuItem("Quit");
     JMenu pkgMenu = new JMenu("Package");
       JMenu build = new JMenu("Build");
       JMenu install = new JMenu("Install packages");
@@ -34,7 +40,7 @@ public class Main extends JFrame implements ActionListener{
       JMenuItem clearLogs = new JMenuItem("Clear logs");
 
   public Main(){
-    setIconImage(Toolkit.getDefaultToolkit().getImage("upload.png"));
+    //box
     setTitle("ArchIDE");
     setVisible(false);
     setSize(600,301);
@@ -52,9 +58,9 @@ public class Main extends JFrame implements ActionListener{
     logArea.setBackground(Color.BLACK);
     logArea.setEditable(false);
     logArea.setVisible(true);
-    logArea.append("ArchIDE 0.2.1~ --> Logs (~/.archide/archide.log)");
+    logArea.append("ArchIDE 0.2.2~ --> Logs (~/.archide/archide.log)");
     logArea.append("\n");
-    functions.readLogs(logArea);
+
 
     scrollPane.setViewportView(logArea);
     add(scrollPane);
@@ -63,36 +69,30 @@ public class Main extends JFrame implements ActionListener{
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     scrollPane.setPreferredSize(new Dimension(100, 100));
 
-    fileMenu.add(newPkg);
-      newPkg.addActionListener(this);
-    fileMenu.add(openPkg);
-      openPkg.addActionListener(this);
-    fileMenu.add(refresh);
-      refresh.addActionListener(this);
-
+    fileMenu.add(newPkg); newPkg.addActionListener(this);
+    fileMenu.add(openPkg); openPkg.addActionListener(this);
+    fileMenu.add(refresh); refresh.addActionListener(this);
+    fileMenu.add(remove_folder); fileMenu.add(quit); quit.addActionListener(this);
     pkgMenu.add(build);
-      pkgMenu.add(install);
-        pkgMenu.add(ncPKGBUILD);
-          pkgMenu.add(ncbin);
-            pkgMenu.add(upload);
+    pkgMenu.add(install);
+    pkgMenu.add(ncPKGBUILD);
+    pkgMenu.add(ncbin);
+    pkgMenu.add(upload);
 
-            editMenu.add(openPKGBUILD);
-              editMenu.add(openInstallFile);
-                editMenu.add(newInstallFile);
-                  editMenu.add(settings);
-                    settings.addActionListener(this);
-                    editMenu.add(clearLogs);
-                      clearLogs.addActionListener(this);
+    editMenu.add(openPKGBUILD);
+    editMenu.add(openInstallFile);
+    editMenu.add(newInstallFile);
+    editMenu.add(settings); settings.addActionListener(this);
+    editMenu.add(clearLogs); clearLogs.addActionListener(this);
 
     mainMenuBar.add(fileMenu);
-      mainMenuBar.add(editMenu);
-        mainMenuBar.add(pkgMenu);
+    mainMenuBar.add(editMenu);
+    mainMenuBar.add(pkgMenu);
 
-
-    functions.loadPackages(build, install, ncPKGBUILD, ncbin, upload, openPKGBUILD, newInstallFile, openInstallFile, logArea);
-
-        setLocationRelativeTo(null);
-        setVisible(true);
+    setLocationRelativeTo(null);
+    functions.loadPackages(build, install, ncPKGBUILD, ncbin, upload, openPKGBUILD, newInstallFile, openInstallFile, remove_folder, logArea);
+    functions.readLogs(logArea);
+    setVisible(true);
 
   }
 
@@ -104,32 +104,28 @@ public class Main extends JFrame implements ActionListener{
     String thistime = dateFormat.format(date);
 
     //Create new package directory
-      if (e.getSource() == newPkg)
-      {
-        dispose();
-        newPKG gui = new newPKG();
-        gui.newPKGGUI();
-        logArea.append("\n" + thistime + ": [initialized creation of new package]");
-        String log = "[initialized creation of new package]";
-        functions.logWriter(log);
-      }
+    if (e.getSource() == newPkg){
+      dispose();
+      newPKG gui = new newPKG();
+      gui.newPKGGUI();
+      logArea.append("\n" + thistime + ": [initialized creation of new package]");
+      String log = "[initialized creation of new package]";
+      functions.logWriter(log);
+    }
 
-    if (e.getSource() == settings)
-    {
+    if (e.getSource() == settings){
       try
       {
-          String editor = Files.readAllLines(Paths.get("archide.conf")).get(7);
-          functions.openConf(editor);
-          String log = "\n" + thistime + ": [changing configurations archide.conf]";
-          logArea.append(log);
-          functions.logWriter(log);
-
+        String editor = Files.readAllLines(Paths.get("archide.conf")).get(7);
+        functions.openConf(editor);
+        String log = "\n" + thistime + ": [changing configurations archide.conf]";
+        logArea.append(log);
+        functions.logWriter(log);
       } catch (IOException ioe) { System.out.println(ioe); }
 
     }
 
-    if (e.getSource() == openPkg)
-    {
+    if (e.getSource() == openPkg){
       dispose();
       clonePKG gui = new clonePKG();
       gui.clonePKGGUI();
@@ -138,23 +134,24 @@ public class Main extends JFrame implements ActionListener{
       functions.logWriter(log);
     }
 
-    if (e.getSource() == clearLogs)
-    {
+    if (e.getSource() == clearLogs){
       functions.clearLogs();
       this.dispose();
       new Main();
     }
 
-    if (e.getSource() == refresh)
-    {
+    if (e.getSource() == refresh){
       logArea.append(thistime + ": ~reloading ArchIDE~");
       functions.logWriter("~reloading ArchIDE~");
       dispose(); new Main();
     }
+
+    if (e.getSource() == quit){
+      System.exit(1);
+    }
 }
 
-  public static void main(String[] args)
-  {
+  public static void main(String[] args){
      new Main();
    }
 }
